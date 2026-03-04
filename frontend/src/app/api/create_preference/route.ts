@@ -5,6 +5,8 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN!,
 });
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://mercado-pago-checkout-pro-eta.vercel.app";
+
 export async function POST() {
   try {
     const preference = new Preference(client);
@@ -20,10 +22,11 @@ export async function POST() {
           },
         ],
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
-          failure: `${process.env.NEXT_PUBLIC_APP_URL}/failure`,
-          pending: `${process.env.NEXT_PUBLIC_APP_URL}/pending`,
+          success: `${APP_URL}/success`,
+          failure: `${APP_URL}/failure`,
+          pending: `${APP_URL}/pending`,
         },
+        auto_return: "approved",
       },
     });
 
