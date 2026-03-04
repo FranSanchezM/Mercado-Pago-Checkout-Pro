@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 
 const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN!,
+  options: {
+    integratorId: process.env.MP_INTEGRATOR_ID,
+  },
 });
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://mercado-pago-checkout-pro-eta.vercel.app";
@@ -15,12 +18,21 @@ export async function POST() {
       body: {
         items: [
           {
-            id: "remera-copilot",
+            id: "1234",
             title: "Remera Copilot",
+            description: "Dispositivo de tienda móvil de comercio electrónico",
+            picture_url: "https://placehold.co/400x400?text=Remera",
+            category_id: "clothing",
             quantity: 1,
             unit_price: 2000,
           },
         ],
+        payment_methods: {
+          excluded_payment_methods: [{ id: "visa" }],
+          installments: 6,
+        },
+        external_reference: "MP-PARTNERS-001",
+        notification_url: `${APP_URL}/api/webhook`,
         back_urls: {
           success: `${APP_URL}/success`,
           failure: `${APP_URL}/failure`,
